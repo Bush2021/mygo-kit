@@ -62,12 +62,17 @@ func (m *Main) Show() {
 func (m *Main) Window() *mygo.Window { return m.win }
 
 // Tray adds the app's icon to the notification area. A left click calls
-// show; a right click opens o's menu, or the one given later with SetMenu.
-// The app runs on when its windows close, and the icon goes when it quits.
+// show, or opens the menu too when show is nil, for an app with no main
+// window; a right click opens o's menu, or the one given later with
+// SetMenu. The app runs on when its windows close, and the icon goes when
+// it quits.
 func Tray(o mygo.TrayOptions, show func()) (*mygo.Tray, error) {
 	tray, err := mygo.NewTray(o)
 	if err != nil {
 		return nil, err
+	}
+	if show == nil {
+		show = tray.PopUpMenu
 	}
 	tray.OnClick(show)
 	// A listener keeps the app running when its last window closes.
