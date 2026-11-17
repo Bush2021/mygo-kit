@@ -2,7 +2,7 @@ module github.com/Bush2021/mygo-kit
 
 go 1.27.4
 
-require github.com/egoist/mygo v0.9.2
+require github.com/egoist/mygo v0.10.0
 
 require (
 	github.com/ebitengine/purego v0.11.1 // indirect
