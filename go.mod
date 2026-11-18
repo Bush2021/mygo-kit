@@ -1,6 +1,6 @@
 module github.com/Bush2021/mygo-kit
 
-go 1.27.4
+go 1.27.3
 
 require github.com/egoist/mygo v0.10.0
 
