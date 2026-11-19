@@ -16,6 +16,16 @@ func Heading(c *ui.Context, s string) ui.Element {
 // that it holds its width.
 func Figure(e ui.Element) ui.Element { return e.FontFeatures("tnum") }
 
+// Link is ui.Link, lighter on a dark surface, where Windows' accent is too
+// deep for text.
+func Link(c *ui.Context, label, url string) ui.Element {
+	e := ui.Link(c, label, url)
+	if t := c.Theme(); t.Dark {
+		e.TextColor(t.Accent.Mix(ui.Hex("#ffffff"), .45))
+	}
+	return e
+}
+
 // Back leads from a page to the one it opened from.
 type Back struct {
 	// Parent is the title of the page it leads to.

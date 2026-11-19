@@ -11,9 +11,10 @@ a rule needs one.
 
 - A main window has no title bar: `kit.Window` hides it, keeps the
   system's window buttons over the page and puts Mica behind the window.
-- `kit.Shell` lays it out: the sidebar runs to the top edge, the page is
-  beside it on a lighter layer with a hairline between them. The band under
-  the window buttons and the sidebar's header move the window.
+- `kit.Shell` lays it out: the sidebar and the page side by side on the
+  window's material, nothing between them, below the band of the window
+  buttons. The app's name and the page's title share a line. The band and
+  the sidebar's header move the window.
 - `kit.Apply` comes first in the view. Colors come from the theme it sets,
   never from a hex value in a page.
 - A main window keeps its size and place (`StateKey`), and the app runs one
@@ -69,14 +70,18 @@ a rule needs one.
 
 ## Color
 
-- Layers are told apart by fill, one step at a time: window, page layer,
-  surface. Raised surfaces have no outline; in the light they have a dark ring
-  and a faint shadow, in the dark a ring a little lighter than the surface.
+- Two layers: the window's material, and surfaces on it, a step lighter
+  with a faint dark ring and no shadow, as Settings' cards.
 - Shadows are for what floats: menus, popups, dialogs, toasts.
+- The accent is the desktop's, in the shades Windows 11's own controls
+  use: the deeper one in the light, the lighter one, with black text on
+  it, in the dark (`kit.Apply`).
 - The accent marks what is chosen or on, and the one action that matters
   on a screen (`ui.PrimaryButton`). Not headings, not icons, not borders.
 - Red, amber and green mean failed, in progress and fine. Nothing else uses
-  them.
+  them: a star or a flag the user sets is in the text's color.
+- An item not yet read, as a message, is marked with a dot in the accent,
+  as Mail and Outlook mark it.
 
 ## Shape
 
@@ -86,11 +91,13 @@ a rule needs one.
 
 ## Text
 
-- The theme's size for text, 12 for `kit.Muted` details, 18 for the app's
+- Text is in Segoe UI Variable on Windows 11. The theme's size for text,
+  12 for `kit.Muted` details, 18 for the app's
   name, `kit.TitleSize` for a page's title. Weight 600 for titles and
-  headings only.
+  headings only, and for an item not yet read, beside its dot.
 - A number that changes in place is a `kit.Figure`, so it keeps its width.
 - Code, paths and identifiers are in a monospaced face.
+- Links are `kit.Link`, which keeps the accent legible on the dark.
 
 ## Controls
 
@@ -134,7 +141,8 @@ a rule needs one.
 
 - Left click shows the main window, opening it if it is closed. Right click
   opens the menu. Nothing waits for a double click. `desk.Tray` does
-  this and takes the icon away when the app quits.
+  this and takes the icon away when the app quits. An app with no main
+  window opens the menu on either click.
 - An app with no main window in that mode (a background task that asks
   something) shows a flyout on a left click instead (`mygo.NewFlyout`),
   with a button that opens the app's window.

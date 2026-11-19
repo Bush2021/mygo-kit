@@ -13,18 +13,16 @@ const (
 	SidebarWidth = 220
 	// PageSide is the room beside a page's content.
 	PageSide = 32
-	// TitleSize is the size of a page's title.
-	TitleSize = 24
 	// PanelRadius rounds cards and panels; controls inside them take the
 	// theme's smaller one.
-	PanelRadius = 10
+	PanelRadius = 12
+	// TitleSize is the size of a page's title.
+	TitleSize = 20
 	// RowMinHeight is a setting row's height with a one-line label.
 	RowMinHeight = 56
 	// ContentWidth is the widest a NarrowPage's content grows, so that a
 	// row's label and its control stay within one glance.
 	ContentWidth = 1120
-	// pageTop is the room above a page's title where nothing else is.
-	pageTop = 20
 )
 
 // Window gives a main window its frame: no title bar, the system's window
@@ -60,14 +58,7 @@ func Apply(c *ui.Context) {
 		t.Warning = ui.Hex("#9d5d00")
 		t.Success = ui.Hex("#0f7b0f")
 	}
+	applyAccent(&t)
+	t.Font = uiFont
 	c.SetTheme(&t)
-}
-
-// layer is the color of the pages' side of the window, one step above the
-// sidebar's.
-func layer(t *ui.Theme) ui.Color {
-	if t.Dark {
-		return ui.Hex("#3a3a3a").Alpha(.3)
-	}
-	return ui.Hex("#ffffff").Alpha(.5)
 }

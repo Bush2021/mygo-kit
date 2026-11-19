@@ -11,6 +11,9 @@ import (
 	"github.com/egoist/mygo/ui"
 )
 
+// The pictures do not follow the desktop's accent.
+func init() { lookupPalette = func() (palette, bool) { return palette{}, false } }
+
 var (
 	iconCircle = Icon(`<circle cx="12" cy="12" r="9"/>`)
 	iconSquare = Icon(`<rect x="4" y="4" width="16" height="16" rx="2"/>`)

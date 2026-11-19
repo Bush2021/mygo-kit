@@ -2,20 +2,21 @@ package kit
 
 import "github.com/egoist/mygo/ui"
 
-// Shell lays out a main window: the sidebar, which runs to the top edge,
-// and beside it the page, under the system's window buttons. The band the
-// buttons are in moves the window.
+// Shell lays out a main window: the sidebar and beside it the page, both
+// on the window's material, below the band of the system's window buttons,
+// which moves the window. The app's name and the page's title share a line.
 func Shell(c *ui.Context, sidebar, page func()) {
-	t := c.Theme()
 	bar := c.TitleBar()
 	ui.Row(c).Fill().AlignItems(ui.Stretch).Children(func() {
-		top := float32(16)
+		// The header's padding and the title's taller row put both on the
+		// same line.
+		top := Top(c) + 2
 		if bar.Left > 0 {
 			// macOS' window buttons are over the sidebar.
 			top = bar.Bottom + 8
 		}
 		ui.Column(c).Width(SidebarWidth).Shrink(0).Padding(top, 8, 16).Gap(8).Children(sidebar)
-		ui.Column(c).Grow(1).MinWidth(0).Background(layer(t)).BorderWidth(0, 0, 0, 1).BorderColor(t.Border).ClipY().Children(func() {
+		ui.Column(c).Grow(1).MinWidth(0).ClipY().Children(func() {
 			page()
 			ui.Box(c).Absolute().Top(0).Left(0).Right(bar.Right).Height(bar.Height).DragWindow()
 		})
@@ -39,9 +40,8 @@ func SidebarHeader(c *ui.Context, name, detail string) ui.Element {
 }
 
 // NavItem is an item of a ui.Sidebar. The chosen one is tinted with the
-// accent and marked with a pill, as Windows' Settings mark theirs; MyGo
-// would fill it with the accent while the list has the focus. extra adds
-// to the item's end, as a badge.
+// accent and marked with a pill; MyGo would fill it with the accent while
+// the list has the focus. extra adds to the item's end, as a badge.
 func NavItem(c *ui.Context, id string, icon *ui.SVG, label string, chosen bool, extra func()) ui.Element {
 	t := c.Theme()
 	item := *t
@@ -67,10 +67,8 @@ func NavItem(c *ui.Context, id string, icon *ui.SVG, label string, chosen bool, 
 	})
 }
 
-// Top is the room above a page's title: below the window buttons.
-func Top(c *ui.Context) float32 {
-	return max(pageTop, c.TitleBar().Height+4)
-}
+// Top is the room above a page's title: the band of the window buttons.
+func Top(c *ui.Context) float32 { return max(c.TitleBar().Height, 8) + 4 }
 
 // Page is a page that scrolls, its content one column as wide as the
 // window. Pages that hold a table or an editor lay out their own, with a
@@ -81,10 +79,11 @@ func Page(c *ui.Context, body func()) ui.Element {
 	})
 }
 
-// NarrowPage is a Page whose content grows no wider than ContentWidth, for
-// pages of settings, whose rows read badly when far apart.
+// NarrowPage is a Page whose content grows no wider than ContentWidth, in
+// the middle of a wider window, for pages of settings, whose rows read
+// badly when far apart.
 func NarrowPage(c *ui.Context, body func()) ui.Element {
-	return ui.Scroll(c).Grow(1).Padding(Top(c), PageSide, PageSide).Children(func() {
+	return ui.Scroll(c).Grow(1).Padding(Top(c), PageSide, PageSide).AlignItems(ui.Center).Children(func() {
 		ui.Column(c).Gap(12).FillWidth().MaxWidth(ContentWidth).Children(body)
 	})
 }
